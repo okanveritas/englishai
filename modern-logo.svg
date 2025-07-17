@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="brainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#764ba2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f093fb;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4f46e5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Brain Neural Network -->
+  <g transform="translate(60,35)">
+    <!-- Brain outline -->
+    <path d="M-25,-15 C-30,-25 -20,-30 -10,-28 C0,-32 15,-28 25,-20 C30,-10 28,5 20,15 C10,20 -5,18 -15,15 C-25,10 -28,0 -25,-15 Z" 
+          fill="url(#brainGradient)" filter="url(#glow)" opacity="0.9"/>
+    
+    <!-- Neural connections -->
+    <g stroke="url(#brainGradient)" stroke-width="2" fill="none" opacity="0.7">
+      <!-- Central connections -->
+      <circle cx="-10" cy="-5" r="2" fill="url(#brainGradient)"/>
+      <circle cx="0" cy="0" r="2" fill="url(#brainGradient)"/>
+      <circle cx="10" cy="-8" r="2" fill="url(#brainGradient)"/>
+      <circle cx="-8" cy="8" r="2" fill="url(#brainGradient)"/>
+      <circle cx="12" cy="5" r="2" fill="url(#brainGradient)"/>
+      
+      <!-- Connection lines -->
+      <line x1="-10" y1="-5" x2="0" y2="0"/>
+      <line x1="0" y1="0" x2="10" y2="-8"/>
+      <line x1="0" y1="0" x2="-8" y2="8"/>
+      <line x1="0" y1="0" x2="12" y2="5"/>
+      <line x1="-8" y1="8" x2="12" y2="5"/>
+    </g>
+  </g>
+  
+  <!-- Quiz Symbol -->
+  <g transform="translate(60,75)">
+    <!-- Quiz background circle -->
+    <circle cx="0" cy="0" r="18" fill="url(#textGradient)" opacity="0.9" filter="url(#glow)"/>
+    
+    <!-- Question mark -->
+    <path d="M-6,-8 C-6,-12 -2,-14 2,-14 C6,-14 8,-12 8,-8 C8,-6 6,-4 4,-2 L4,2 M4,6 L4,8" 
+          stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
+  </g>
+  
+  <!-- Floating particles -->
+  <g opacity="0.6">
+    <circle cx="25" cy="30" r="1.5" fill="url(#brainGradient)">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="95" cy="45" r="1" fill="url(#textGradient)">
+      <animate attributeName="opacity" values="0.5;1;0.5" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="20" cy="85" r="1.2" fill="url(#brainGradient)">
+      <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+</svg>
