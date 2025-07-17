@@ -1,52 +1,40 @@
-<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <!-- Modern gradient matching new design -->
-    <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#667eea"/>
-      <stop offset="100%" style="stop-color:#764ba2"/>
-    </linearGradient>
-    
-    <!-- Glow effect -->
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-      <feMerge> 
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-  </defs>
-
-  <!-- Modern background -->
-  <rect width="512" height="512" rx="80" fill="url(#mainGradient)"/>
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="60" cy="60" r="58" fill="#3b82f6" stroke="#ffffff" stroke-width="4"/>
   
-  <!-- Central brain icon with modern design -->
-  <g transform="translate(256, 200)">
-    <!-- Brain shape -->
-    <path d="M-50 0 C-50 -35, -25 -60, 0 -60 C25 -60, 50 -35, 50 0 C50 35, 25 60, 0 60 C-25 60, -50 35, -50 0 Z" 
-          fill="#ffffff" opacity="0.95" filter="url(#glow)"/>
+  <!-- AI Brain Icon -->
+  <g transform="translate(25, 20)">
+    <!-- Brain outline -->
+    <path d="M35 15c8.837 0 16 7.163 16 16v24c0 8.837-7.163 16-16 16s-16-7.163-16-16V31c0-8.837 7.163-16 16-16z" 
+          fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
     
-    <!-- Neural connections (simplified) -->
-    <circle cx="-20" cy="-20" r="6" fill="#667eea"/>
-    <circle cx="20" cy="-20" r="6" fill="#667eea"/>
-    <circle cx="0" cy="0" r="6" fill="#667eea"/>
-    <circle cx="-15" cy="20" r="6" fill="#667eea"/>
-    <circle cx="15" cy="20" r="6" fill="#667eea"/>
+    <!-- Neural network lines -->
+    <g stroke="#ffffff" stroke-width="2" stroke-linecap="round">
+      <line x1="27" y1="25" x2="43" y2="25"/>
+      <line x1="27" y1="35" x2="43" y2="35"/>
+      <line x1="27" y1="45" x2="43" y2="45"/>
+      <line x1="30" y1="55" x2="40" y2="55"/>
+    </g>
     
-    <!-- Elegant connection lines -->
-    <path d="M-20,-20 Q0,-10 20,-20" stroke="#667eea" stroke-width="2" fill="none" opacity="0.8"/>
-    <path d="M-20,-20 Q-10,0 0,0" stroke="#667eea" stroke-width="2" fill="none" opacity="0.8"/>
-    <path d="M20,-20 Q10,0 0,0" stroke="#667eea" stroke-width="2" fill="none" opacity="0.8"/>
-    <path d="M0,0 Q-7.5,15 -15,20" stroke="#667eea" stroke-width="2" fill="none" opacity="0.8"/>
-    <path d="M0,0 Q7.5,15 15,20" stroke="#667eea" stroke-width="2" fill="none" opacity="0.8"/>
+    <!-- AI nodes -->
+    <circle cx="27" cy="25" r="2" fill="#ffffff"/>
+    <circle cx="43" cy="25" r="2" fill="#ffffff"/>
+    <circle cx="35" cy="35" r="2" fill="#ffffff"/>
+    <circle cx="30" cy="45" r="2" fill="#ffffff"/>
+    <circle cx="40" cy="45" r="2" fill="#ffffff"/>
   </g>
   
-  <!-- Quiz symbol with modern style -->
-  <g transform="translate(256, 340)">
-    <circle cx="0" cy="0" r="28" fill="none" stroke="#ffffff" stroke-width="6" opacity="0.9" filter="url(#glow)"/>
-    <line x1="20" y1="20" x2="35" y2="35" stroke="#ffffff" stroke-width="6" stroke-linecap="round" opacity="0.9"/>
+  <!-- Quiz Question Mark -->
+  <g transform="translate(40, 65)">
+    <circle cx="20" cy="20" r="18" fill="#ffffff"/>
+    <path d="M16 12c0-2.2 1.8-4 4-4s4 1.8 4 4c0 2-3 3-3 3" 
+          fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="20" cy="26" r="1.5" fill="#3b82f6"/>
   </g>
   
-  <!-- Clean AI text -->
-  <text x="256" y="440" font-family="Inter, system-ui, sans-serif" font-size="48" font-weight="700" 
-        fill="#ffffff" text-anchor="middle" opacity="0.95">AI Quiz</text>
+  <!-- Decorative elements -->
+  <circle cx="20" cy="30" r="3" fill="#ffffff" opacity="0.3"/>
+  <circle cx="100" cy="25" r="2" fill="#ffffff" opacity="0.4"/>
+  <circle cx="95" cy="85" r="2.5" fill="#ffffff" opacity="0.3"/>
+  <circle cx="25" cy="95" r="2" fill="#ffffff" opacity="0.4"/>
 </svg>
