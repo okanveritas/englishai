@@ -167,12 +167,6 @@ body {
 .app-container {
   min-height: 100vh;
   background: var(--bg-light);
-  width: 100%;
-  overflow-x: hidden; /* Yatay scroll'u engeller */
-  overflow-y: auto; /* Dikey scroll'u açar */
-  position: relative;
-  display: flex;
-  flex-direction: column;
 }
 
 .app-header {
@@ -182,21 +176,16 @@ body {
   top: 0;
   z-index: 100;
   backdrop-filter: blur(10px);
-  width: 100%;
-  /* left/right değerlerini kaldırıyoruz */
 }
 
 .header-content {
   max-width: 1200px;
-  width: 100%;
   margin: 0 auto;
   padding: 0.5rem 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   min-height: 50px;
-  box-sizing: border-box;
-}
 
 .logo {
   display: flex;
