@@ -6761,6 +6761,7 @@ ${count} soru, ${difficulty} seviyede.
 }
 
 // Flashcard functionality
+// Flashcard functionality
 function setupFlashcards() {
     let flashcards = [];
     let currentCardIndex = 0;
@@ -6780,34 +6781,34 @@ function setupFlashcards() {
     const quizBtn = document.getElementById('createQuizFromCards');
     
     if (!createBtn) return; // Exit if elements don't exist yet
-    
+
+    // 📌 Android uyumlu ve esnek format destekli parser
     function parseVocabulary(text) {
         const cards = [];
-        
-        // Try JSON format first
-        try {
-            const jsonData = JSON.parse(text);
-            if (Array.isArray(jsonData)) {
-                return jsonData.map(item => ({
-                    word: item.word || item.english || '',
-                    turkish: item.turkish || item.tr || '',
-                    definition: item.definition || item.def || item.meaning || ''
-                }));
-            }
-        } catch (e) {
-            // Continue with text parsing
-        }
-        
-        // Parse different text formats
-        const lines = text.split('\n').filter(line => line.trim());
-        
+
+        // Temizlik: görünmeyen karakterler, tırnak, satır sonları
+        const cleanedText = text
+            .replace(/[\u200B-\u200D\uFEFF]/g, '')           // zero-width chars
+            .replace(/[“”]/g, '"')                           // smart quotes
+            .replace(/[‘’]/g, "'")                           // smart apostrophes
+            .replace(/\r\n|\r/g, '\n')                       // normalize line endings
+            .replace(/\u00a0/g, ' ')                         // non-breaking space
+            .trim();
+
+        const lines = cleanedText.split('\n').filter(line => line.trim());
+
         for (let line of lines) {
             line = line.trim();
             if (!line || line.startsWith('#') || line.startsWith('//')) continue;
-            
+
             let word = '', turkish = '', definition = '';
-            
-            // Format 1: Standard dash format (word - turkish - definition)
+
+            // Format: Numbered list (1. word - türkçe - definition)
+            if (/^\d+[\.\-]\s*/.test(line)) {
+                line = line.replace(/^\d+[\.\-]\s*/, '');
+            }
+
+            // Format: Standard dash format (word - türkçe - definition)
             if (line.includes(' - ')) {
                 const parts = line.split(' - ');
                 if (parts.length >= 2) {
@@ -6816,7 +6817,7 @@ function setupFlashcards() {
                     definition = parts[2] ? parts[2].trim() : '';
                 }
             }
-            // Format 2: ChatGPT bold format (**word** - turkish)
+            // Format: ChatGPT bold format (**word** - türkçe)
             else if (line.includes('**') && line.includes(' - ')) {
                 const boldMatch = line.match(/\*\*(.*?)\*\*/);
                 if (boldMatch) {
@@ -6827,26 +6828,7 @@ function setupFlashcards() {
                     }
                 }
             }
-            // Format 3: Numbered list (1. word - turkish - definition)
-            else if (/^\d+\./.test(line)) {
-                const withoutNumber = line.replace(/^\d+\.\s*/, '');
-                if (withoutNumber.includes(' - ')) {
-                    const parts = withoutNumber.split(' - ');
-                    if (parts.length >= 2) {
-                        word = parts[0].trim();
-                        turkish = parts[1].trim();
-                        definition = parts[2] ? parts[2].trim() : '';
-                    }
-                }
-            }
-            // Format 4: Definition line (Definition: ...)
-            else if (line.toLowerCase().startsWith('definition:') || line.toLowerCase().startsWith('tanım:')) {
-                if (cards.length > 0) {
-                    cards[cards.length - 1].definition = line.split(':')[1].trim();
-                }
-                continue;
-            }
-            // Format 5: Colon format (word: turkish)
+            // Format: Colon format (word: türkçe)
             else if (line.includes(': ') && !line.toLowerCase().startsWith('definition')) {
                 const parts = line.split(': ');
                 if (parts.length >= 2) {
@@ -6854,73 +6836,75 @@ function setupFlashcards() {
                     turkish = parts[1].trim();
                 }
             }
-            
-            // Add card if we found word and turkish
+            // Format: Definition line
+            else if (line.toLowerCase().startsWith('definition:') || line.toLowerCase().startsWith('tanım:')) {
+                if (cards.length > 0) {
+                    cards[cards.length - 1].definition = line.split(':')[1].trim();
+                }
+                continue;
+            }
+
             if (word && turkish) {
-                cards.push({
-                    word: word,
-                    turkish: turkish,
-                    definition: definition
-                });
+                cards.push({ word, turkish, definition });
             }
         }
-        
+
         return cards;
     }
-    
+
     function createFlashcards() {
         const text = vocabularyInput.value.trim();
         if (!text) {
             alert('Lütfen kelime listesini girin');
             return;
         }
-        
+
         flashcards = parseVocabulary(text);
         if (flashcards.length === 0) {
             alert('Geçerli kelime bulunamadı. Format: "word - türkçe - definition"');
             return;
         }
-        
+
         currentCardIndex = 0;
         isFlipped = false;
         updateFlashcard();
         updateControls();
         flashcardContainer.style.display = 'block';
-        
+
         // Scroll to flashcards
         flashcardContainer.scrollIntoView({ behavior: 'smooth' });
     }
-    
+
     function updateFlashcard() {
         if (flashcards.length === 0) return;
-        
+
         const card = flashcards[currentCardIndex];
         document.getElementById('cardWord').textContent = card.word;
         document.getElementById('cardTurkish').textContent = card.turkish;
         document.getElementById('cardDefinition').textContent = card.definition;
-        
+
         document.getElementById('currentCard').textContent = currentCardIndex + 1;
         document.getElementById('totalCards').textContent = flashcards.length;
-        
+
         // Reset flip state
         flashcard.classList.remove('flipped');
         isFlipped = false;
-        
+
         // Update progress
         const progress = ((currentCardIndex + 1) / flashcards.length) * 100;
         document.getElementById('flashcardProgress').style.width = progress + '%';
     }
-    
+
     function updateControls() {
         prevBtn.disabled = currentCardIndex === 0;
         nextBtn.disabled = currentCardIndex === flashcards.length - 1;
     }
-    
+
     function flipCard() {
         flashcard.classList.toggle('flipped');
         isFlipped = !isFlipped;
     }
-    
+
     function previousCard() {
         if (currentCardIndex > 0) {
             currentCardIndex--;
@@ -6928,7 +6912,7 @@ function setupFlashcards() {
             updateControls();
         }
     }
-    
+
     function nextCard() {
         if (currentCardIndex < flashcards.length - 1) {
             currentCardIndex++;
@@ -6936,7 +6920,7 @@ function setupFlashcards() {
             updateControls();
         }
     }
-    
+
     function shuffleCards() {
         for (let i = flashcards.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -6946,12 +6930,38 @@ function setupFlashcards() {
         updateFlashcard();
         updateControls();
     }
-    
+
     function createQuizFromFlashcards() {
         if (flashcards.length < 3) {
             alert('Quiz için en az 3 kelime gerekli!');
             return;
         }
+        // Quiz logic here...
+    }
+
+    // 📌 Android uyumu için yapıştırma sonrası otomatik parse
+    vocabularyInput.addEventListener('paste', function () {
+        setTimeout(() => {
+            const parsed = parseVocabulary(vocabularyInput.value);
+            if (parsed.length > 0) {
+                flashcards = parsed;
+                currentCardIndex = 0;
+                updateFlashcard();
+                updateControls();
+                flashcardContainer.style.display = 'block';
+            }
+        }, 50);
+    });
+
+    // Olay bağlamaları
+    createBtn.addEventListener('click', createFlashcards);
+    prevBtn.addEventListener('click', previousCard);
+    nextBtn.addEventListener('click', nextCard);
+    flipBtn.addEventListener('click', flipCard);
+    shuffleBtn.addEventListener('click', shuffleCards);
+    quizBtn.addEventListener('click', createQuizFromFlashcards);
+}
+
         
        // Generate quiz JSON from flashcards
 const quizData = {
