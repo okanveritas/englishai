@@ -1,69 +1,40 @@
-const CACHE_NAME = 'ai-quiz-lite-v1';
+const CACHE_NAME = 'ai-quiz-prod-v1';
+const BASE_PATH = '/englishai/'; // REPO ADINIZ
 const urlsToCache = [
-  '/',
-  'index.html',
-  'manifest.json',
-  'apple-icon.png',
-  'logo.svg',
-  'favicon.svg'
+  BASE_PATH,
+  BASE_PATH + 'index.html',
+  BASE_PATH + 'manifest.json',
+  BASE_PATH + 'apple-icon.png',
+  BASE_PATH + 'sw.js'
 ];
 
-self.addEventListener('install', event => {
+// INSTALL
+self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(urlsToCache))
+      .then(() => self.skipWaiting())
   );
 });
 
-// Install event
-self.addEventListener('install', event => {
-  console.log('Service Worker installing...');
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Caching app resources...');
-        return cache.addAll(urlsToCache);
-      })
-      .then(() => {
-        console.log('All resources cached successfully');
-        return self.skipWaiting();
-      })
-  );
+// FETCH
+self.addEventListener('fetch', (event) => {
+  if (event.request.url.startsWith(location.origin + BASE_PATH)) {
+    event.respondWith(
+      caches.match(event.request)
+        .then(response => response || fetch(event.request))
+        .catch(() => caches.match(BASE_PATH + 'index.html'))
+    );
+  }
 });
 
-// Fetch event with fallback
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        if (response) {
-          return response;
-        }
-        
-        // For navigation requests, always return index.html
-        if (event.request.mode === 'navigate') {
-          return caches.match('/index.html') || caches.match('/');
-        }
-        
-        return fetch(event.request).catch(() => {
-          // If offline and requesting a page, return cached main page
-          if (event.request.mode === 'navigate') {
-            return caches.match('/index.html') || caches.match('/');
-          }
-        });
-      })
-  );
-});
-
-// Activate event
-self.addEventListener('activate', event => {
+// ACTIVATE
+self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
+        cacheNames.map(cache => {
+          if (cache !== CACHE_NAME) return caches.delete(cache);
         })
       );
     })
