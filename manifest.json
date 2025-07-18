@@ -1,46 +1,27 @@
 {
   "name": "AI Destekli Quiz",
   "short_name": "AI Quiz",
-  "description": "AI destekli akıllı quiz sistemi. ChatGPT ile güçlendirilmiş kişiselleştirilmiş öğrenme deneyimi.",
+  "description": "AI destekli akıllı quiz sistemi",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#667eea",
-  "orientation": "any",
-  "scope": "/",
-  "lang": "tr",
-  "categories": ["education", "productivity"],
-  "prefer_related_applications": false,
   "icons": [
     {
-      "src": "ai-logo.svg",
-      "sizes": "144x144",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
-    {
-      "src": "ai-logo.svg",
-      "sizes": "192x192",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
-    {
-      "src": "ai-logo.svg", 
-      "sizes": "512x512",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
-    {
-      "src": "ai-logo.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "maskable"
-    },
-    {
-      "src": "apple-icon.svg",
+      "src": "apple-icon.png",
       "sizes": "180x180",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192", 
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ]
 }
