@@ -6791,15 +6791,12 @@ function parseVocabulary(text) {
 
     // Girdi temizleme & normalize
     text = text
-        .replace(/\r\n|\r/g, '\n')            // Satır sonlarını normalize et (CRLF, CR -> LF)
-        .replace(/[“”]/g, '"')                // Akıllı tırnakları düzelt
-        .replace(/[‘’]/g, "'")                // Akıllı tek tırnakları düzelt
-        .replace(/\u00A0/g, ' ')              // Non-breaking space -> normal boşluk
-        .replace(/[\u200B-\u200D\uFEFF]/g, '') // Zero-width boşlukları temizle
-        .replace(/\u00AD/g, '')               // Soft hyphen kaldır
-        .replace(/\s+/g, ' ')                 // Fazla boşlukları tek boşluk yap
-        .trim();
-
+      .replace(/[\u200B-\u200D\uFEFF]/g, '')   // Zero-width karakterler temizle
+      .replace(/\u00A0/g, ' ')                 // Non-breaking space boşluk yap
+      .replace(/[“”]/g, '"')                   // Akıllı çift tırnakları düzelt
+      .replace(/[‘’]/g, "'")                   // Akıllı tek tırnakları düzelt
+      .replace(/\r\n|\r/g, '\n')               // Satır sonlarını normalize et
+      .trim();
     // JSON format kontrolü
     try {
         const jsonData = JSON.parse(text);
