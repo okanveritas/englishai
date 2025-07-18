@@ -1,6 +1,32 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
+<script>
+// Service Worker Güncelleme
+if ('serviceWorker' in navigator) {
+  // 1. Kayıt ve anında güncelle
+  navigator.serviceWorker.register('/englishai/sw.js', {
+    updateViaCache: 'none'
+  }).then(reg => {
+    reg.update(); // Hemen kontrol
+    
+    // 2. Güncelleme bildirimi
+    reg.addEventListener('updatefound', () => {
+      const newWorker = reg.installing;
+      newWorker.addEventListener('statechange', () => {
+        if (newWorker.state === 'activated') {
+          window.location.reload(); // Otomatik yenile
+        }
+      });
+    });
+  });
+
+  // 3. Kullanıcı etkileşimiyle zorla güncelle
+  document.getElementById('refresh-btn').addEventListener('click', () => {
+    navigator.serviceWorker.controller.postMessage('SKIP_WAITING');
+  });
+}
+</script>
     <!-- Google Tag Manager -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-62GVNW139P"></script>
     <script>
