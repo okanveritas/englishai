@@ -1,57 +1,42 @@
-const CACHE_NAME = 'ai-quiz-v' + new Date().getTime(); // Her deployda değişen benzersiz isim
-const BASE_PATH = '/englishai/';
-const ASSETS = [
+const CACHE_NAME = 'ai-quiz-prod-v2';
+const BASE_PATH = '/englishai/'; // REPO ADINIZ
+const urlsToCache = [
   BASE_PATH,
-  BASE_PATH + 'index.html?t=' + Date.now(),
-  BASE_PATH + 'manifest.json?t=' + Date.now(),
-  BASE_PATH + 'sw.js?t=' + Date.now(),
-  BASE_PATH + 'styles.css?t=' + Date.now(),
-  BASE_PATH + 'app.js?t=' + Date.now()
+  BASE_PATH + 'index.html',
+  BASE_PATH + 'manifest.json',
+  BASE_PATH + 'apple-icon.png',
+  BASE_PATH + 'sw.js'
 ];
 
-// 1. INSTALL - Yeni cache oluştur
-self.addEventListener('install', event => {
-  self.skipWaiting(); // Hemen aktifleş
+// INSTALL
+self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Yeni cache oluşturuldu:', CACHE_NAME);
-        return cache.addAll(ASSETS);
-      })
+      .then(cache => cache.addAll(urlsToCache))
+      .then(() => self.skipWaiting())
   );
 });
 
-// 2. ACTIVATE - Eski cache'leri temizle
-self.addEventListener('activate', event => {
+// FETCH
+self.addEventListener('fetch', (event) => {
+  if (event.request.url.startsWith(location.origin + BASE_PATH)) {
+    event.respondWith(
+      caches.match(event.request)
+        .then(response => response || fetch(event.request))
+        .catch(() => caches.match(BASE_PATH + 'index.html'))
+    );
+  }
+});
+
+// ACTIVATE
+self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then(keys => {
+    caches.keys().then(cacheNames => {
       return Promise.all(
-        keys.map(key => {
-          if (key !== CACHE_NAME) {
-            console.log('Eski cache siliniyor:', key);
-            return caches.delete(key);
-          }
+        cacheNames.map(cache => {
+          if (cache !== CACHE_NAME) return caches.delete(cache);
         })
       );
-    }).then(() => self.clients.claim()) // Tüm tabları kontrol et
+    })
   );
-});
-
-// 3. FETCH - Network-first stratejisi
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    fetch(event.request) // Önce network'ten dene
-      .then(response => {
-        // Yeni veriyi cache'e yaz
-        const clone = response.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
-        return response;
-      })
-      .catch(() => caches.match(event.request)) // Offline destek
-  );
-});
-
-// 4. MESSAGE - Manuel güncelleme tetikleme
-self.addEventListener('message', event => {
-  if (event.data === 'SKIP_WAITING') self.skipWaiting();
 });
