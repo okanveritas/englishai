@@ -5,6 +5,7 @@ const urlsToCache = [
   '/index.html',
   '/manifest.json',
   '/logo.svg',
+  'apple-icon.png',
   '/browserconfig.xml'
 ];
 
