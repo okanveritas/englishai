@@ -212,13 +212,17 @@ body {
 /* Section Headers - Enhanced Style */
 .section-header {
   text-align: center;
-  padding: 4rem 2rem 5rem 2rem;
+  padding: 4rem 1rem 5rem 1rem; /* Yan padding'leri azalttık */
   background: linear-gradient(135deg, #3b82f6 0%, #6366f1 50%, #8b5cf6 100%);
   color: white;
-  margin: 0 -2rem 2rem -2rem;
+  margin: 0 0 2rem 0; /* Negatif margin'i kaldırdık */
   position: relative;
   overflow: hidden;
   border-radius: 0 0 40px 40px;
+  width: 100%; /* Genişlik garantisi */
+  box-sizing: border-box; /* Padding hesaba katılsın */
+  left: 0; /* Pozisyon sabitleme */
+  right: 0; /* Pozisyon sabitleme */
 }
 
 .section-header::before {
