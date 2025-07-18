@@ -59,59 +59,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-html, body {
-  width: 100% !important;
-  max-width: 100% !important;
-  overflow-x: hidden !important;
-  position: relative !important;
-}
 
-* {
-  box-sizing: border-box !important;
-  max-width: 100% !important;
-  flex-shrink: 0 !important;
-}
-
-/* Özel durumlar için ek koruma */
-[class*="container"], 
-[class*="col-"], 
-section, header, footer {
-  min-width: 0 !important;
-  overflow: hidden !important;
-}
-
-/* Mobile özel fix */
-@media (max-width: 1024px) {
-  body {
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-y: contain;
-  }
-  
-  /* Safari özel fix */
-  @supports (-webkit-touch-callout: none) {
-    html, body {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-    }
-  }
-}
-/* iOS Safari fix */
-@supports (-webkit-touch-callout: none) {
-  body {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-  }
-  
-  #root { /* Ana container'ınız */
-    position: relative;
-    height: 100%;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-}
         /* Mevcut CSS içeriğiniz */
     </style>
 </head>
@@ -220,8 +168,11 @@ body {
   min-height: 100vh;
   background: var(--bg-light);
   width: 100%;
-  overflow-x: hidden;
+  overflow-x: hidden; /* Yatay scroll'u engeller */
+  overflow-y: auto; /* Dikey scroll'u açar */
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .app-header {
@@ -232,8 +183,7 @@ body {
   z-index: 100;
   backdrop-filter: blur(10px);
   width: 100%;
-  left: 0;
-  right: 0;
+  /* left/right değerlerini kaldırıyoruz */
 }
 
 .header-content {
