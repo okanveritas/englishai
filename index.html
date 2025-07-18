@@ -6782,6 +6782,7 @@ function setupFlashcards() {
     if (!createBtn) return; // Exit if elements don't exist yet
     
 function parseVocabulary(text) {
+    text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
     const cards = [];
 
     if (typeof text !== 'string') {
