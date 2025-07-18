@@ -6895,13 +6895,13 @@ function cleanInput(text) {
       .trim();
 }
 function createFlashcards() {
-    const text = vocabularyInput.value.trim();
-    if (!text) {
+    let rawText = vocabularyInput.value;
+    if (!rawText.trim()) {
         alert('Lütfen kelime listesini girin');
         return;
     }
-
-    flashcards = parseVocabulary(text);
+    let cleanText = cleanInput(rawText);
+    flashcards = parseVocabulary(cleanText);
     if (flashcards.length === 0) {
         alert('Geçerli kelime bulunamadı. Format: "word - türkçe - definition"');
         return;
