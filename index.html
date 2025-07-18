@@ -6786,26 +6786,36 @@ function setupFlashcards() {
         
         // Try JSON format first
         try {
-            const jsonData = JSON.parse(text);
-            if (Array.isArray(jsonData)) {
-                return jsonData.map(item => ({
-                    word: item.word || item.english || '',
-                    turkish: item.turkish || item.tr || '',
-                    definition: item.definition || item.def || item.meaning || ''
-                }));
-            }
-        } catch (e) {
-            // Continue with text parsing
+        const jsonData = JSON.parse(text);
+        if (Array.isArray(jsonData)) {
+            return jsonData.map(item => ({
+                word: item.word || item.english || '',
+                turkish: item.turkish || item.tr || '',
+                definition: item.definition || item.def || item.meaning || ''
+            }));
         }
-        
-        // Parse different text formats
-        const lines = text.split('\n').filter(line => line.trim());
-        
-        for (let line of lines) {
-            line = line.trim();
-            if (!line || line.startsWith('#') || line.startsWith('//')) continue;
-            
-            let word = '', turkish = '', definition = '';
+    } catch (e) {
+        // Continue to fallback parser below
+    }
+        text = text
+        .replace(/\r\n|\r/g, '\n') // Windows/Android'deki \r\n'i normalize et
+        .replace(/[“”]/g, '"')     // Smart quote’ları düzleştir
+        .replace(/[‘’]/g, "'")     // Smart apostrophe’leri düzleştir
+        .replace(/\u00A0/g, ' ')   // Non-breaking space karakterini boşluk yap
+        .trim();
+       // Satırlara ayır ve her satırı analiz et
+    const lines = text.split('\n').map(line => line.trim()).filter(Boolean);
+
+    for (let line of lines) {
+        const parts = line.split(' - ');
+        if (parts.length >= 3) {
+            cards.push({
+                word: parts[0].trim(),
+                turkish: parts[1].trim(),
+                definition: parts.slice(2).join(' - ').trim()
+            });
+        }
+    }
             
             // Format 1: Standard dash format (word - turkish - definition)
             if (line.includes(' - ')) {
