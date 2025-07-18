@@ -1,23 +1,54 @@
-# AI Destekli İngilizce Quiz Uygulaması
+```markdown
+# 🚀 AI Powered English Quiz | PWA
 
-[![GitHub license](https://img.shields.io/github/license/okanveritas/englishai)](https://github.com/okanveritas/englishai/blob/main/LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/okanveritas/englishai)](https://github.com/okanveritas/englishai/stargazers)
-[![PWA](https://img.shields.io/badge/PWA-Optimized-brightgreen)](https://okanveritas.github.io/englishai/)
-
-<img src="ai-logo.svg" width="150" alt="AI Quiz Logo">
-
-Yapay zeka destekli interaktif İngilizce öğrenme platformu. Progressive Web App (PWA) teknolojisiyle tüm cihazlarda native uygulama deneyimi sunar.
+<div align="center">
+  <img src="ai-logo.svg" width="150" alt="AI Quiz Logo">
+  <p>Yapay zeka destekli modern İngilizce öğrenme platformu</p>
+  
+  [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+  [![PWA](https://img.shields.io/badge/PWA-Optimized-brightgreen.svg)](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps)
+  [![GitHub last commit](https://img.shields.io/github/last-commit/okanveritas/englishai.svg)](https://github.com/okanveritas/englishai/commits/main)
+</div>
 
 ## ✨ Özellikler
+- 📱 **Tam PWA Desteği** (Ana ekrana eklenebilir)
+- 🧠 **ChatGPT Entegrasyonu** ile akıllı quizler
+- 📊 **Gerçek Zamanlı İlerleme Takibi**
+- 🌙 **Karanlık/Açık Tema** Desteği
+- 🔄 **Offline Çalışma** Özelliği
 
-- 🧠 ChatGPT entegrasyonlu akıllı quizler
-- 📱 Tam PWA desteği (Ana ekrana eklenebilir)
-- 📊 Seviye analiz sistemi
-- 🗂️ Kelime flashcard'ları
-- ⚡ Gerçek zamanlı ilerleme takibi
+## 🏗️ Teknolojiler
+- HTML5, CSS3, JavaScript (ES6+)
+- Service Workers
+- Web App Manifest
+- Responsive Tasarım
 
-## 🚀 Kurulum
-
+## 🚀 Hızlı Başlangıç
 ```bash
 git clone https://github.com/okanveritas/englishai.git
 cd englishai
+```
+
+## 🌍 Canlı Demo
+[👉 https://okanveritas.github.io/englishai/](https://okanveritas.github.io/englishai/)
+
+## 📜 Lisans
+MIT Lisansı - Detaylar için [LICENSE](LICENSE) dosyasına bakınız.
+
+---
+
+<div align="center">
+  <sub>❤️ Okan Yaldız tarafından geliştirildi | 2023</sub>
+</div>
+```
+
+### Kullanım:
+1. Yukarıdaki tüm içeriği kopyalayın
+2. Projenizin kök dizininde `README.md` dosyası oluşturun
+3. İçeriği yapıştırıp kaydedin
+4. `ai-logo.svg` dosyanızın doğru konumda olduğundan emin olun
+
+Not: 
+- Logo görüntülenmiyorsa `ai-logo.svg` yolunu kontrol edin
+- Tüm bağlantılar mevcut repo yapınıza uygun şekilde otomatik çalışacaktır
+- Badge'ler otomatik olarak güncel bilgileri gösterecektir
