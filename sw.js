@@ -1,13 +1,19 @@
-const CACHE_NAME = 'ai-quiz-v6';
+const CACHE_NAME = 'ai-quiz-lite-v1';
 const urlsToCache = [
   '/',
-  '/?utm_source=pwa',
   '/index.html',
   '/manifest.json',
+  '/apple-icon.png',
   '/logo.svg',
-  'apple-icon.png',
-  '/browserconfig.xml'
+  '/favicon.svg'
 ];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(urlsToCache))
+  );
+});
 
 // Install event
 self.addEventListener('install', event => {
