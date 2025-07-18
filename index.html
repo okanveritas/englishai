@@ -6884,6 +6884,15 @@ vocabularyInput.addEventListener('paste', function () {
         }
     }, 50);
 });
+function cleanInput(text) {
+    return text
+      .replace(/[\u200B-\u200D\uFEFF]/g, '')   // Zero-width characters
+      .replace(/&[#A-Za-z0-9]+;/g, '')         // HTML entities
+      .replace(/0x[0-9a-fA-F]+/g, '')          // Hex codes
+      .replace(/\\u[0-9a-fA-F]{4}/g, '')       // Unicode escapes
+      .replace(/[\r\n]+/g, '\n')                // Normalize line breaks
+      .replace(/\s+/g, ' ')                     // Multiple spaces to one
+      .trim();
 
 function createFlashcards() {
     const text = vocabularyInput.value.trim();
