@@ -4417,7 +4417,7 @@ button[data-option].selected, button[onclick*="selectAnswer"].selected, [id*="te
   }
 }
     </style>
-    <link rel="icon" href="/modern-logo.svg">
+    <link rel="icon" href="modern-logo.svg">
 </head>
 <body>
 
@@ -4427,7 +4427,7 @@ button[data-option].selected, button[onclick*="selectAnswer"].selected, [id*="te
         <header class="app-header">
             <div class="header-content">
                 <div class="logo">
-                    <img src="/modern-logo.svg" alt="AI Quiz Logo" width="32" height="32" style="margin-right: 8px;">
+                    <img src="modern-logo.svg" alt="AI Quiz Logo" width="32" height="32" style="margin-right: 8px;">
                     <h1>AI Destekli Quiz</h1>
                 </div>
                 <nav class="main-nav">
@@ -6929,35 +6929,35 @@ function setupFlashcards() {
             return;
         }
         
-        // Generate quiz JSON from flashcards
-        const quizData = {
-            title: "Flashcard Kelimeleri Quiz",
-            type: "YDS",
-            timer: false, // Disable timer for flashcard quiz
-            questions: []
-        };
-        
-        // Create questions for each flashcard
-        flashcards.forEach((card, index) => {
-            // Question 1: Turkish to English
-            const turkishToEnglish = {
-                question: `"${card.turkish}" kelimesinin İngilizce karşılığı nedir?`,
-                options: generateOptions(card.word, flashcards, 'word'),
-                correct: 0,
-                explanation: `"${card.turkish}" kelimesinin İngilizce karşılığı "${card.word}"dir. ${card.definition}`
-            };
-            
-            // Question 2: English to Turkish  
-            const englishToTurkish = {
-                question: `"${card.word}" kelimesinin Türkçe anlamı nedir?`,
-                options: generateOptions(card.turkish, flashcards, 'turkish'),
-                correct: 0,
-                explanation: `"${card.word}" kelimesinin Türkçe anlamı "${card.turkish}"dir. ${card.definition}`
-            };
-            
-            quizData.questions.push(turkishToEnglish, englishToTurkish);
-        });
-        
+       // Generate quiz JSON from flashcards
+const quizData = {
+    title: "Flashcard Kelimeleri Quiz",
+    type: "YDS",
+    timer: false,
+    questions: []
+};
+
+flashcards.forEach((card, index) => {
+    // Question 1: Turkish to English
+    const turkishToEnglishOptions = generateOptions(card.word, flashcards, 'word');
+    const turkishToEnglish = {
+        question: `"${card.turkish}" kelimesinin İngilizce karşılığı nedir?`,
+        options: turkishToEnglishOptions,
+        correct: turkishToEnglishOptions.indexOf(card.word), // Doğru cevabın gerçek index'ini bul
+        explanation: `"${card.turkish}" kelimesinin İngilizce karşılığı "${card.word}"dir. ${card.definition}`
+    };
+    
+    // Question 2: English to Turkish
+    const englishToTurkishOptions = generateOptions(card.turkish, flashcards, 'turkish');
+    const englishToTurkish = {
+        question: `"${card.word}" kelimesinin Türkçe anlamı nedir?`,
+        options: englishToTurkishOptions,
+        correct: englishToTurkishOptions.indexOf(card.turkish), // Doğru cevabın gerçek index'ini bul
+        explanation: `"${card.word}" kelimesinin Türkçe anlamı "${card.turkish}"dir. ${card.definition}`
+    };
+    
+    quizData.questions.push(turkishToEnglish, englishToTurkish);
+});
         // Shuffle questions
         for (let i = quizData.questions.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
