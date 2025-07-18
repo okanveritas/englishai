@@ -5096,22 +5096,19 @@ Herhangi bir format kullanabilirsiniz, sistem otomatik algılar!"
                         <div class="helper-prompt">
                             <h4>📚 Advanced Vocabulary Listesi</h4>
                             <div class="prompt-text" onclick="copyToClipboard(this)">
-ChatGPT, bana advanced level vocabulary listesi hazırlar mısın? 
+ChatGPT, bana advanced seviye İngilizce kelimelerden oluşan bir liste hazırlar mısın?
 
-Format (bu format kullan):
-word - türkçe anlamı - english definition
+Cevabı sadece kod bloğu (code block) içinde ver. 
+Format şu şekilde olsun: `word - türkçe anlamı - english definition`. 
 
-50 kelime olsun ve şu kategorilerden seç:
-- Academic vocabulary (AWL)
-- Formal/business words  
-- Scientific terms
-- Advanced adjectives/verbs
-- Abstract concepts
+Toplam 10 kelime ver. 
 
-Örnek:
-achieve - başarmak - to successfully complete something
-abundant - bol, zengin - existing in large quantities
-acquire - elde etmek - to get or obtain something
+Şu kategorilerden seç:(Fakat formatı bozma, kategoriyi belirtme).
+Academic vocabulary (AWL), 
+Formal/business words, 
+Scientific terms, 
+Advanced adjectives/verbs, 
+Abstract concepts.
                             </div>
                             <small>Tıklayarak kopyala</small>
                         </div>
@@ -5119,12 +5116,12 @@ acquire - elde etmek - to get or obtain something
                         <div class="helper-prompt">
                             <h4>🔤 Zor Kelimeler & Synonyms</h4>
                             <div class="prompt-text" onclick="copyToClipboard(this)">
-ChatGPT, İngilizce'de en zor kelimelerden 30 tanesini ver. 
-
+ChatGPT, İngilizce'de en zor kelimelerden 10 tanesini ver. 
+Cevabı sadece kod bloğu (code block) içinde ver. 
 Format (bu format kullan):
 word - türkçe anlamı - english definition
 
-Kelimeler şunlardan olsun:
+Kelimeler şunlardan olsun: (Fakat formatı bozma, kategoriyi belirtme).
 - Sık kullanılan advanced vocabulary
 - Academic word list (AWL) 
 - Formal/academic writing words
@@ -6781,143 +6778,116 @@ function setupFlashcards() {
     
     if (!createBtn) return; // Exit if elements don't exist yet
     
-function parseVocabulary(text) {
-    text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-    const cards = [];
-
-    if (typeof text !== 'string') {
-        console.error('parseVocabulary: Invalid input', text);
-        return [];
-    }
-
-    // Girdi temizleme & normalize
-    text = text
-      .replace(/[\u200B-\u200D\uFEFF]/g, '')   // Zero-width karakterler temizle
-      .replace(/\u00A0/g, ' ')                 // Non-breaking space boşluk yap
-      .replace(/[“”]/g, '"')                   // Akıllı çift tırnakları düzelt
-      .replace(/[‘’]/g, "'")                   // Akıllı tek tırnakları düzelt
-      .replace(/\r\n|\r/g, '\n')               // Satır sonlarını normalize et
-      .trim();
-    // JSON format kontrolü
-    try {
-        const jsonData = JSON.parse(text);
-        if (Array.isArray(jsonData)) {
-            return jsonData.map(item => ({
-                word: item.word || item.english || '',
-                turkish: item.turkish || item.tr || '',
-                definition: item.definition || item.def || item.meaning || ''
-            }));
-        }
-    } catch (e) {
-        // JSON değilse devam et
-    }
-
-    const lines = text.split('\n').map(line => line.trim()).filter(Boolean);
-
-    for (let line of lines) {
-        if (!line || line.startsWith('#') || line.startsWith('//')) continue;
-
-        let word = '', turkish = '', definition = '';
-
-        if (line.includes(' - ')) {
-            const parts = line.split(' - ');
-            if (parts.length >= 2) {
-                word = parts[0].trim();
-                turkish = parts[1].trim();
-                definition = parts.slice(2).join(' - ').trim();
+    function parseVocabulary(text) {
+        const cards = [];
+        
+        // Try JSON format first
+        try {
+            const jsonData = JSON.parse(text);
+            if (Array.isArray(jsonData)) {
+                return jsonData.map(item => ({
+                    word: item.word || item.english || '',
+                    turkish: item.turkish || item.tr || '',
+                    definition: item.definition || item.def || item.meaning || ''
+                }));
             }
+        } catch (e) {
+            // Continue with text parsing
         }
-        else if (line.includes('**') && line.includes(' - ')) {
-            const boldMatch = line.match(/\*\*(.*?)\*\*/);
-            if (boldMatch) {
-                word = boldMatch[1].trim();
-                const afterBold = line.split('**')[2];
-                if (afterBold && afterBold.includes(' - ')) {
-                    turkish = afterBold.split(' - ')[1].trim();
-                }
-            }
-        }
-        else if (/^\d+\./.test(line)) {
-            const withoutNumber = line.replace(/^\d+\.\s*/, '');
-            if (withoutNumber.includes(' - ')) {
-                const parts = withoutNumber.split(' - ');
+        
+        // Parse different text formats
+        const lines = text.split('\n').filter(line => line.trim());
+        
+        for (let line of lines) {
+            line = line.trim();
+            if (!line || line.startsWith('#') || line.startsWith('//')) continue;
+            
+            let word = '', turkish = '', definition = '';
+            
+            // Format 1: Standard dash format (word - turkish - definition)
+            if (line.includes(' - ')) {
+                const parts = line.split(' - ');
                 if (parts.length >= 2) {
                     word = parts[0].trim();
                     turkish = parts[1].trim();
-                    definition = parts.slice(2).join(' - ').trim();
+                    definition = parts[2] ? parts[2].trim() : '';
                 }
             }
-        }
-        else if (line.toLowerCase().startsWith('definition:') || line.toLowerCase().startsWith('tanım:')) {
-            if (cards.length > 0) {
-                cards[cards.length - 1].definition = line.split(':')[1].trim();
+            // Format 2: ChatGPT bold format (**word** - turkish)
+            else if (line.includes('**') && line.includes(' - ')) {
+                const boldMatch = line.match(/\*\*(.*?)\*\*/);
+                if (boldMatch) {
+                    word = boldMatch[1].trim();
+                    const afterBold = line.split('**')[2];
+                    if (afterBold && afterBold.includes(' - ')) {
+                        turkish = afterBold.split(' - ')[1].trim();
+                    }
+                }
             }
-            continue;
-        }
-        else if (line.includes(': ') && !line.toLowerCase().startsWith('definition')) {
-            const parts = line.split(': ');
-            if (parts.length >= 2) {
-                word = parts[0].trim();
-                turkish = parts[1].trim();
+            // Format 3: Numbered list (1. word - turkish - definition)
+            else if (/^\d+\./.test(line)) {
+                const withoutNumber = line.replace(/^\d+\.\s*/, '');
+                if (withoutNumber.includes(' - ')) {
+                    const parts = withoutNumber.split(' - ');
+                    if (parts.length >= 2) {
+                        word = parts[0].trim();
+                        turkish = parts[1].trim();
+                        definition = parts[2] ? parts[2].trim() : '';
+                    }
+                }
+            }
+            // Format 4: Definition line (Definition: ...)
+            else if (line.toLowerCase().startsWith('definition:') || line.toLowerCase().startsWith('tanım:')) {
+                if (cards.length > 0) {
+                    cards[cards.length - 1].definition = line.split(':')[1].trim();
+                }
+                continue;
+            }
+            // Format 5: Colon format (word: turkish)
+            else if (line.includes(': ') && !line.toLowerCase().startsWith('definition')) {
+                const parts = line.split(': ');
+                if (parts.length >= 2) {
+                    word = parts[0].trim();
+                    turkish = parts[1].trim();
+                }
+            }
+            
+            // Add card if we found word and turkish
+            if (word && turkish) {
+                cards.push({
+                    word: word,
+                    turkish: turkish,
+                    definition: definition
+                });
             }
         }
-
-        if (word && turkish) {
-            cards.push({ word, turkish, definition });
+        
+        return cards;
+    }
+    
+    function createFlashcards() {
+        const text = vocabularyInput.value.trim();
+        if (!text) {
+            alert('Lütfen kelime listesini girin');
+            return;
         }
-    }
-
-    return cards;
-}
-
-// Paste event'inde otomatik temizleme + flashcard oluşturma önerisi:
-vocabularyInput.addEventListener('paste', function () {
-    setTimeout(() => {
-        const cleanedText = vocabularyInput.value;
-        const parsed = parseVocabulary(cleanedText);
-        if (parsed.length > 0) {
-            flashcards = parsed;
-            currentCardIndex = 0;
-            updateFlashcard();
-            updateControls();
-            flashcardContainer.style.display = 'block';
+        
+        flashcards = parseVocabulary(text);
+        if (flashcards.length === 0) {
+            alert('Geçerli kelime bulunamadı. Format: "word - türkçe - definition"');
+            return;
         }
-    }, 50);
-});
-function cleanInput(text) {
-    return text
-      .replace(/[\u200B-\u200D\uFEFF]/g, '')   // Zero-width characters
-      .replace(/&[#A-Za-z0-9]+;/g, '')         // HTML entities
-      .replace(/0x[0-9a-fA-F]+/g, '')          // Hex codes
-      .replace(/\\u[0-9a-fA-F]{4}/g, '')       // Unicode escapes
-      .replace(/[\r\n]+/g, '\n')                // Normalize line breaks
-      .replace(/\s+/g, ' ')                     // Multiple spaces to one
-      .trim();
-}
-function createFlashcards() {
-    let text = vocabularyInput.value.trim();
-    if (!text) {
-        alert('Lütfen kelime listesini girin');
-        return;
+        
+        currentCardIndex = 0;
+        isFlipped = false;
+        updateFlashcard();
+        updateControls();
+        flashcardContainer.style.display = 'block';
+        
+        // Scroll to flashcards
+        flashcardContainer.scrollIntoView({ behavior: 'smooth' });
     }
-
-    text = normalizeText(text); // 🧼 Burada normalize ediyoruz
-
-    flashcards = parseVocabulary(text);
-    if (flashcards.length === 0) {
-        alert('Geçerli kelime bulunamadı. Format: "word - türkçe - definition"');
-        return;
-    }
-
-    currentCardIndex = 0;
-    isFlipped = false;
-    updateFlashcard();
-    updateControls();
-    flashcardContainer.style.display = 'block';
-
-    flashcardContainer.scrollIntoView({ behavior: 'smooth' });
-}
-
+    
     function updateFlashcard() {
         if (flashcards.length === 0) return;
         
