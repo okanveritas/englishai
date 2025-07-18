@@ -5032,14 +5032,12 @@ ZORUNLU JSON FORMAT:
                     <p class="section-subtitle">ChatGPT'den aldığınız kelime listelerini yapıştırarak etkili öğrenme için interaktif flashcard'lara dönüştürün</p>
                 </div>
 
-                <div class="flashcard-input">
-                    <div class="input-section">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                            <label for="vocabularyInput">ChatGPT'den Kelime Listesi:</label>
-                            <button class="btn btn-success btn-sm" id="quickDemo" style="font-size: 0.8rem; padding: 0.5rem 1rem;">
-                                ⚡ Hızlı Demo
-                            </button>
-                        </div>
+               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; min-width: 0;">
+    <label for="vocabularyInput" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">ChatGPT'den Kelime Listesi:</label>
+    <button class="btn btn-success btn-sm" id="quickDemo" style="font-size: 0.8rem; padding: 0.5rem 1rem; flex-shrink: 0;">
+        ⚡ Hızlı Demo
+    </button>
+</div>
                         <textarea 
                             id="vocabularyInput" 
                             placeholder="📝 Desteklenen formatlar:
