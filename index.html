@@ -6854,7 +6854,6 @@ function setupFlashcards() {
                 if (cards.length > 0) {
                     cards[cards.length - 1].definition = line.split(':')[1].trim();
                 }
-                continue;
             }
             // Format 5: Colon format (word: turkish)
             else if (line.includes(': ') && !line.toLowerCase().startsWith('definition')) {
