@@ -2,82 +2,56 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AI Destekli Quiz</title>
-    <meta name="description" content="AI destekli akıllı quiz sistemi. ChatGPT ile güçlendirilmiş kişiselleştirilmiş öğrenme deneyimi. Quiz, flashcard ve seviye testi ile İngilizce öğrenin.">
-    <meta name="keywords" content="AI quiz, ChatGPT, İngilizce quiz, flashcard, AI destekli öğrenme, yapay zeka quiz, İngilizce test, seviye belirleme">
+    <meta name="description" content="AI destekli akıllı quiz sistemi. ChatGPT ile güçlendirilmiş kişiselleştirilmiş öğrenme deneyimi.">
+    <meta name="keywords" content="AI quiz, ChatGPT, İngilizce quiz, flashcard">
     <meta name="author" content="Okan Yaldız">
-    <meta name="robots" content="index, follow">
     
-    <!-- PWA Manifest -->
+    <!-- GitHub Pages Base Path -->
+    <base href="/englishai/">
+    
+    <!-- PWA Core -->
     <link rel="manifest" href="manifest.json">
-    
-    <!-- Apple PWA Meta Tags -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="AI Quiz">
     <meta name="theme-color" content="#667eea">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-touch-fullscreen" content="yes">
-    <meta name="format-detection" content="telephone=no">
     
-    <!-- iPad Specific -->
-    <meta name="apple-mobile-web-app-orientations" content="portrait">
-    <link rel="apple-touch-startup-image" href="ai-logo.svg">
-    
-    <!-- Additional Apple Touch Icons for all devices -->
-    <link rel="apple-touch-icon" sizes="57x57" href="apple-icon.svg">
-    <link rel="apple-touch-icon" sizes="60x60" href="apple-icon.svg">
-    <link rel="apple-touch-icon" sizes="72x72" href="apple-icon.svg">
-    <link rel="apple-touch-icon" sizes="76x76" href="apple-icon.svg">
-    <link rel="apple-touch-icon" sizes="114x114" href="apple-icon.svg">
-    <link rel="apple-touch-icon" sizes="120x120" href="apple-icon.svg">
-    <link rel="apple-touch-icon" sizes="144x144" href="apple-icon.svg">
-    <link rel="apple-touch-icon" sizes="152x152" href="apple-icon.svg">
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-icon.svg">
-    
-    <!-- Apple Touch Icon -->
-    <link rel="apple-touch-icon" href="apple-icon.png">
-
-    <!-- Splash Screen -->
-    <link rel="apple-touch-startup-image" href="splash.png">
-
-    <!-- Status Bar -->
+    <!-- iOS Optimizations -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="AI Quiz">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-    <!-- Windows Tile -->
+    <link rel="apple-touch-icon" href="apple-icon.png">
+    
+    <!-- Windows Config -->
     <meta name="msapplication-config" content="browserconfig.xml">
-
-    <!-- Service Worker Registration -->
+    
+    <!-- Service Worker -->
     <script>
         if('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(reg => console.log('Service Worker registered'))
-                    .catch(err => console.log('Service Worker registration failed: ', err));
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('SW Registered'))
+                    .catch(err => console.error('SW Error:', err));
             });
         }
     </script>
     
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="">
-    <meta property="og:title" content="AI Destekli Quiz">
-    <meta property="og:description" content="AI destekli akıllı quiz sistemi. ChatGPT ile güçlendirilmiş kişiselleştirilmiş öğrenme deneyimi.">
-    <meta property="og:image" content="">
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="">
-    <meta property="twitter:title" content="AI Destekli Quiz">
-    <meta property="twitter:description" content="AI destekli akıllı quiz sistemi. ChatGPT ile güçlendirilmiş kişiselleştirilmiş öğrenme deneyimi.">
-    <meta property="twitter:image" content="">
-    
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* Mevcut CSS içeriğiniz */
+    </style>
+</head>
+<body>
+    <!-- Uygulama içeriği -->
+</body>
+</html>
     <style>
 /* Dark Theme Only */
 :root {
