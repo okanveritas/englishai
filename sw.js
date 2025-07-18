@@ -1,11 +1,11 @@
 const CACHE_NAME = 'ai-quiz-lite-v1';
 const urlsToCache = [
   '/',
-  '/index.html',
-  '/manifest.json',
-  '/apple-icon.png',
-  '/logo.svg',
-  '/favicon.svg'
+  'index.html',
+  'manifest.json',
+  'apple-icon.png',
+  'logo.svg',
+  'favicon.svg'
 ];
 
 self.addEventListener('install', event => {
