@@ -3769,6 +3769,26 @@ button[data-option].selected, button[onclick*="selectAnswer"].selected, [id*="te
   margin: 0;
   position: relative;
   overflow: hidden;
+  /* Yeni eklenen kritik kurallar */
+  width: 100%;
+  max-width: 100vw;
+  left: 0;
+  right: 0;
+  box-sizing: border-box;
+}
+
+/* İçerik için ek koruma */
+.hero-section > * {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Mobile için optimize */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 3rem 1rem;
+    background-attachment: scroll;
+  }
 }
 
 .hero-section::before {
