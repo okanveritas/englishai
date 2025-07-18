@@ -6781,116 +6781,120 @@ function setupFlashcards() {
     
     if (!createBtn) return; // Exit if elements don't exist yet
     
-    function parseVocabulary(text) {
-        const cards = [];
-        
-        // Try JSON format first
-        try {
-            const jsonData = JSON.parse(text);
-            if (Array.isArray(jsonData)) {
-                return jsonData.map(item => ({
-                    word: item.word || item.english || '',
-                    turkish: item.turkish || item.tr || '',
-                    definition: item.definition || item.def || item.meaning || ''
-                }));
-            }
-        } catch (e) {
-            // Continue with text parsing
+function parseVocabulary(text) {
+    const cards = [];
+
+    if (typeof text !== 'string') {
+        console.error('parseVocabulary: Invalid input', text);
+        return [];
+    }
+
+    // 1. Normalize input text — Windows, Android, iOS farklı satır sonları ve tırnaklar var
+    text = text
+        .replace(/\r\n|\r/g, '\n')   // Satır sonlarını tek tip yap (CRLF, CR -> LF)
+        .replace(/[“”]/g, '"')       // Akıllı çift tırnakları düzelt
+        .replace(/[‘’]/g, "'")       // Akıllı tek tırnakları düzelt
+        .replace(/\u00A0/g, ' ')     // Non-breaking space → normal boşluk
+        .replace(/[\u200B-\u200D\uFEFF]/g, '')  // Zero-width boşlukları kaldır
+        .trim();
+
+    // JSON format kontrolü
+    try {
+        const jsonData = JSON.parse(text);
+        if (Array.isArray(jsonData)) {
+            return jsonData.map(item => ({
+                word: item.word || item.english || '',
+                turkish: item.turkish || item.tr || '',
+                definition: item.definition || item.def || item.meaning || ''
+            }));
         }
-        
-        // Parse different text formats
-        const lines = text.split('\n').filter(line => line.trim());
-        
-        for (let line of lines) {
-            line = line.trim();
-            if (!line || line.startsWith('#') || line.startsWith('//')) continue;
-            
-            let word = '', turkish = '', definition = '';
-            
-            // Format 1: Standard dash format (word - turkish - definition)
-            if (line.includes(' - ')) {
-                const parts = line.split(' - ');
+    } catch (e) {
+        // JSON değilse devam et
+    }
+
+    // Satır satır işle
+    const lines = text.split('\n').filter(line => line.trim());
+
+    for (let line of lines) {
+        line = line.trim();
+        if (!line || line.startsWith('#') || line.startsWith('//')) continue;
+
+        let word = '', turkish = '', definition = '';
+
+        if (line.includes(' - ')) {
+            const parts = line.split(' - ');
+            if (parts.length >= 2) {
+                word = parts[0].trim();
+                turkish = parts[1].trim();
+                definition = parts[2] ? parts.slice(2).join(' - ').trim() : '';
+            }
+        } 
+        else if (line.includes('**') && line.includes(' - ')) {
+            const boldMatch = line.match(/\*\*(.*?)\*\*/);
+            if (boldMatch) {
+                word = boldMatch[1].trim();
+                const afterBold = line.split('**')[2];
+                if (afterBold && afterBold.includes(' - ')) {
+                    turkish = afterBold.split(' - ')[1].trim();
+                }
+            }
+        }
+        else if (/^\d+\./.test(line)) {
+            const withoutNumber = line.replace(/^\d+\.\s*/, '');
+            if (withoutNumber.includes(' - ')) {
+                const parts = withoutNumber.split(' - ');
                 if (parts.length >= 2) {
                     word = parts[0].trim();
                     turkish = parts[1].trim();
-                    definition = parts[2] ? parts[2].trim() : '';
+                    definition = parts[2] ? parts.slice(2).join(' - ').trim() : '';
                 }
-            }
-            // Format 2: ChatGPT bold format (**word** - turkish)
-            else if (line.includes('**') && line.includes(' - ')) {
-                const boldMatch = line.match(/\*\*(.*?)\*\*/);
-                if (boldMatch) {
-                    word = boldMatch[1].trim();
-                    const afterBold = line.split('**')[2];
-                    if (afterBold && afterBold.includes(' - ')) {
-                        turkish = afterBold.split(' - ')[1].trim();
-                    }
-                }
-            }
-            // Format 3: Numbered list (1. word - turkish - definition)
-            else if (/^\d+\./.test(line)) {
-                const withoutNumber = line.replace(/^\d+\.\s*/, '');
-                if (withoutNumber.includes(' - ')) {
-                    const parts = withoutNumber.split(' - ');
-                    if (parts.length >= 2) {
-                        word = parts[0].trim();
-                        turkish = parts[1].trim();
-                        definition = parts[2] ? parts[2].trim() : '';
-                    }
-                }
-            }
-            // Format 4: Definition line (Definition: ...)
-            else if (line.toLowerCase().startsWith('definition:') || line.toLowerCase().startsWith('tanım:')) {
-                if (cards.length > 0) {
-                    cards[cards.length - 1].definition = line.split(':')[1].trim();
-                }
-                continue;
-            }
-            // Format 5: Colon format (word: turkish)
-            else if (line.includes(': ') && !line.toLowerCase().startsWith('definition')) {
-                const parts = line.split(': ');
-                if (parts.length >= 2) {
-                    word = parts[0].trim();
-                    turkish = parts[1].trim();
-                }
-            }
-            
-            // Add card if we found word and turkish
-            if (word && turkish) {
-                cards.push({
-                    word: word,
-                    turkish: turkish,
-                    definition: definition
-                });
             }
         }
-        
-        return cards;
+        else if (line.toLowerCase().startsWith('definition:') || line.toLowerCase().startsWith('tanım:')) {
+            if (cards.length > 0) {
+                cards[cards.length - 1].definition = line.split(':')[1].trim();
+            }
+            continue;
+        }
+        else if (line.includes(': ') && !line.toLowerCase().startsWith('definition')) {
+            const parts = line.split(': ');
+            if (parts.length >= 2) {
+                word = parts[0].trim();
+                turkish = parts[1].trim();
+            }
+        }
+
+        if (word && turkish) {
+            cards.push({ word, turkish, definition });
+        }
     }
-    
-    function createFlashcards() {
-        const text = vocabularyInput.value.trim();
-        if (!text) {
-            alert('Lütfen kelime listesini girin');
-            return;
-        }
-        
-        flashcards = parseVocabulary(text);
-        if (flashcards.length === 0) {
-            alert('Geçerli kelime bulunamadı. Format: "word - türkçe - definition"');
-            return;
-        }
-        
-        currentCardIndex = 0;
-        isFlipped = false;
-        updateFlashcard();
-        updateControls();
-        flashcardContainer.style.display = 'block';
-        
-        // Scroll to flashcards
-        flashcardContainer.scrollIntoView({ behavior: 'smooth' });
+
+    return cards;
+}
+
+function createFlashcards() {
+    const text = vocabularyInput.value.trim();
+    if (!text) {
+        alert('Lütfen kelime listesini girin');
+        return;
     }
-    
+
+    flashcards = parseVocabulary(text);
+    if (flashcards.length === 0) {
+        alert('Geçerli kelime bulunamadı. Format: "word - türkçe - definition"');
+        return;
+    }
+
+    currentCardIndex = 0;
+    isFlipped = false;
+    updateFlashcard();
+    updateControls();
+    flashcardContainer.style.display = 'block';
+
+    // Scroll to flashcards
+    flashcardContainer.scrollIntoView({ behavior: 'smooth' });
+}
+
     function updateFlashcard() {
         if (flashcards.length === 0) return;
         
