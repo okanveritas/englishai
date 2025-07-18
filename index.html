@@ -268,46 +268,69 @@ body {
 /* Section Headers - Enhanced Style */
 .section-header {
   text-align: center;
-  padding: 4rem 2rem 5rem 2rem;
+  padding: 4rem 1rem 5rem 1rem; /* Yan padding'leri azalttık */
   background: linear-gradient(135deg, #3b82f6 0%, #6366f1 50%, #8b5cf6 100%);
   color: white;
-  margin: 0 -2rem 2rem -2rem;
+  margin: 0 0 2rem 0; /* Negatif margin'i kaldırdık */
   position: relative;
   overflow: hidden;
   border-radius: 0 0 40px 40px;
+  width: 100%; /* Eklendi */
+  box-sizing: border-box; /* Eklendi */
+  left: 0; /* Eklendi */
+  right: 0; /* Eklendi */
 }
 
+/* Shimmer efekti için güvenli versiyon */
 .section-header::before {
   content: '';
   position: absolute;
   top: 0;
-  left: -100%;
-  width: 100%;
+  left: -50%; /* Daha dar alanda animasyon */
+  width: 200%; /* Daha yumuşak geçiş */
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255,255,255,0.1), 
+    transparent);
   animation: shimmer 3s infinite;
+  z-index: 1;
 }
 
+/* Gradient overlay için optimize versiyon */
 .section-header::after {
   content: '';
   position: absolute;
   bottom: -2px;
   left: 0;
   right: 0;
-  height: 120px;
+  height: 60px; /* Yüksekliği azalttık */
   background: linear-gradient(180deg, 
     rgba(99,102,241,0.8) 0%, 
     rgba(99,102,241,0.4) 30%, 
-    rgba(99,102,241,0.15) 60%, 
-    rgba(99,102,241,0.05) 80%, 
     transparent 100%);
-  z-index: 1;
-  filter: blur(1px);
+  z-index: 2;
+  filter: blur(0.5px); /* Daha hafif blur */
 }
 
+/* Animasyon tanımı */
 @keyframes shimmer {
-  0% { left: -100%; }
-  100% { left: 100%; }
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* MOBİL UYUMLU STİLLER */
+@media (max-width: 768px) {
+  .section-header {
+    padding: 3rem 0.5rem 4rem 0.5rem;
+    border-radius: 0 0 30px 30px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+  .section-header::after {
+    height: 40px;
+  }
 }
 
 .section-title {
