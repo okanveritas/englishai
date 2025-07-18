@@ -6895,13 +6895,15 @@ function cleanInput(text) {
       .trim();
 }
 function createFlashcards() {
-    let rawText = vocabularyInput.value;
-    if (!rawText.trim()) {
+    let text = vocabularyInput.value.trim();
+    if (!text) {
         alert('Lütfen kelime listesini girin');
         return;
     }
-    let cleanText = cleanInput(rawText);
-    flashcards = parseVocabulary(cleanText);
+
+    text = normalizeText(text); // 🧼 Burada normalize ediyoruz
+
+    flashcards = parseVocabulary(text);
     if (flashcards.length === 0) {
         alert('Geçerli kelime bulunamadı. Format: "word - türkçe - definition"');
         return;
@@ -6913,7 +6915,6 @@ function createFlashcards() {
     updateControls();
     flashcardContainer.style.display = 'block';
 
-    // Scroll to flashcards
     flashcardContainer.scrollIntoView({ behavior: 'smooth' });
 }
 
