@@ -6789,13 +6789,15 @@ function parseVocabulary(text) {
         return [];
     }
 
-    // 1. Normalize input text — Windows, Android, iOS farklı satır sonları ve tırnaklar var
+    // Girdi temizleme & normalize
     text = text
-        .replace(/\r\n|\r/g, '\n')   // Satır sonlarını tek tip yap (CRLF, CR -> LF)
-        .replace(/[“”]/g, '"')       // Akıllı çift tırnakları düzelt
-        .replace(/[‘’]/g, "'")       // Akıllı tek tırnakları düzelt
-        .replace(/\u00A0/g, ' ')     // Non-breaking space → normal boşluk
-        .replace(/[\u200B-\u200D\uFEFF]/g, '')  // Zero-width boşlukları kaldır
+        .replace(/\r\n|\r/g, '\n')            // Satır sonlarını normalize et (CRLF, CR -> LF)
+        .replace(/[“”]/g, '"')                // Akıllı tırnakları düzelt
+        .replace(/[‘’]/g, "'")                // Akıllı tek tırnakları düzelt
+        .replace(/\u00A0/g, ' ')              // Non-breaking space -> normal boşluk
+        .replace(/[\u200B-\u200D\uFEFF]/g, '') // Zero-width boşlukları temizle
+        .replace(/\u00AD/g, '')               // Soft hyphen kaldır
+        .replace(/\s+/g, ' ')                 // Fazla boşlukları tek boşluk yap
         .trim();
 
     // JSON format kontrolü
@@ -6812,11 +6814,9 @@ function parseVocabulary(text) {
         // JSON değilse devam et
     }
 
-    // Satır satır işle
-    const lines = text.split('\n').filter(line => line.trim());
+    const lines = text.split('\n').map(line => line.trim()).filter(Boolean);
 
     for (let line of lines) {
-        line = line.trim();
         if (!line || line.startsWith('#') || line.startsWith('//')) continue;
 
         let word = '', turkish = '', definition = '';
@@ -6826,9 +6826,9 @@ function parseVocabulary(text) {
             if (parts.length >= 2) {
                 word = parts[0].trim();
                 turkish = parts[1].trim();
-                definition = parts[2] ? parts.slice(2).join(' - ').trim() : '';
+                definition = parts.slice(2).join(' - ').trim();
             }
-        } 
+        }
         else if (line.includes('**') && line.includes(' - ')) {
             const boldMatch = line.match(/\*\*(.*?)\*\*/);
             if (boldMatch) {
@@ -6846,7 +6846,7 @@ function parseVocabulary(text) {
                 if (parts.length >= 2) {
                     word = parts[0].trim();
                     turkish = parts[1].trim();
-                    definition = parts[2] ? parts.slice(2).join(' - ').trim() : '';
+                    definition = parts.slice(2).join(' - ').trim();
                 }
             }
         }
@@ -6871,6 +6871,21 @@ function parseVocabulary(text) {
 
     return cards;
 }
+
+// Paste event'inde otomatik temizleme + flashcard oluşturma önerisi:
+vocabularyInput.addEventListener('paste', function () {
+    setTimeout(() => {
+        const cleanedText = vocabularyInput.value;
+        const parsed = parseVocabulary(cleanedText);
+        if (parsed.length > 0) {
+            flashcards = parsed;
+            currentCardIndex = 0;
+            updateFlashcard();
+            updateControls();
+            flashcardContainer.style.display = 'block';
+        }
+    }, 50);
+});
 
 function createFlashcards() {
     const text = vocabularyInput.value.trim();
