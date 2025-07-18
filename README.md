@@ -41,14 +41,3 @@ MIT Lisansı - Detaylar için [LICENSE](LICENSE) dosyasına bakınız.
   <sub>❤️ Okan Yaldız tarafından geliştirildi | 2023</sub>
 </div>
 ```
-
-### Kullanım:
-1. Yukarıdaki tüm içeriği kopyalayın
-2. Projenizin kök dizininde `README.md` dosyası oluşturun
-3. İçeriği yapıştırıp kaydedin
-4. `ai-logo.svg` dosyanızın doğru konumda olduğundan emin olun
-
-Not: 
-- Logo görüntülenmiyorsa `ai-logo.svg` yolunu kontrol edin
-- Tüm bağlantılar mevcut repo yapınıza uygun şekilde otomatik çalışacaktır
-- Badge'ler otomatik olarak güncel bilgileri gösterecektir
