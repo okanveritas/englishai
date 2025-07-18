@@ -36,9 +36,6 @@
     <link rel="apple-touch-icon" sizes="152x152" href="apple-icon.svg">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-icon.svg">
     
-    <!-- Apple Touch Icons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAAdVJREFUeJzt3DFuwzAMQFGd3v/KOUNOkCGAOxRB/d4ZBEGQP+SPv/e+/wA/9ue7LwC+RQDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMX8BBOgPpZdlbUkAAAAASUVORK5CYII=">
-    <link rel="apple-touch-icon" sizes="152x152" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJgAAACYCAYAAAAYwiAhAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAaCxIB0t1+/AAAAdVJREFUeJzt3DFuwzAMQFGd3v/KOUNOkCGAOxRB/d4ZBEGQP+SPv/e+/wA/9ue7LwC+RQDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMQIgRgDECIAYARAjAGIEQIwAiBEAMX8BBOgPpZdlbUkAAAAASUVORK5CYII=">
     <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" href="apple-icon.png">
 
@@ -47,19 +44,33 @@
 
     <!-- Status Bar -->
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Windows Tile -->
+    <meta name="msapplication-config" content="browserconfig.xml">
+
+    <!-- Service Worker Registration -->
+    <script>
+        if('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Service Worker registered'))
+                    .catch(err => console.log('Service Worker registration failed: ', err));
+            });
+        }
+    </script>
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="">
     <meta property="og:title" content="AI Destekli Quiz">
-    <meta property="og:description" content="AI destekli akıllı quiz sistemi. ChatGPT ile güçlendirilmiş kişiselleştirilmiş öğrenme deneyimi."
+    <meta property="og:description" content="AI destekli akıllı quiz sistemi. ChatGPT ile güçlendirilmiş kişiselleştirilmiş öğrenme deneyimi.">
     <meta property="og:image" content="">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="">
     <meta property="twitter:title" content="AI Destekli Quiz">
-    <meta property="twitter:description" content="AI destekli akıllı quiz sistemi. ChatGPT ile güçlendirilmiş kişiselleştirilmiş öğrenme deneyimi."
+    <meta property="twitter:description" content="AI destekli akıllı quiz sistemi. ChatGPT ile güçlendirilmiş kişiselleştirilmiş öğrenme deneyimi.">
     <meta property="twitter:image" content="">
     
     <!-- Favicon -->
