@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ai-quiz-prod-v2.1';
+const CACHE_NAME = 'ai-quiz-prod-v2.11';
 const BASE_PATH = '/englishai/'; // REPO ADINIZ
 const urlsToCache = [
   BASE_PATH,
