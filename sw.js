@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ai-quiz-prod-v2.3';
+const CACHE_NAME = 'ai-quiz-prod-v2.4';
 const BASE_PATH = '/englishai/'; // 
 const urlsToCache = [
   BASE_PATH,
